@@ -13,3 +13,24 @@ export let movies = [
 	"Malang",
 	"Dhoom2",
 ];
+
+
+export let books = [
+	"Tools of titans",
+	"Tribe of mentors",
+	"Atomix habits",
+	"Psychology of money",
+	"The martian",
+	"Snow crash",
+	"The mom test",
+	"The first principles",
+	"Dune series",
+	"Zen and the Art of Motorcycle Maintenance: An Inquiry Into Values",
+	"Stranger in a Strange Land",
+	"Delivering Happiness By Tony Hsieh",
+	"Neuromancer by William Gibson",
+	"The purple cow",
+	"Great by Choice",
+	"Brave New World",
+	"Sell or Be Sold: How to Get Your Way in Business and in Life",
+];
