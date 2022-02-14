@@ -1,0 +1,15 @@
+export let movies = [
+	"Ae dil h mushkil",
+	"Chandani chowk to china",
+	"Raabta",
+	"Saaho",
+	"Fukrey",
+	"Happy new year",
+	"PK",
+	"2 states",
+	"ABCD 2",
+	"Secret superstar",
+	"Badhaai ho",
+	"Malang",
+	"Dhoom2",
+];
