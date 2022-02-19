@@ -5,18 +5,23 @@ import { useEffect, useState } from "react";
 import axios from "axios";
 
 function App() {
-	// tasks
-	// onclick finished show those in finished tab, and remove from current list
-
-	// const [active, setActive] = useState();
-
+	
+	// sets the active list rendered
+	// this is allContent with various filters
 	const [activeList, setActiveList] = useState([]);
+
+	//list all all content regardless of any filters
 	const [allContent, setAllContent] = useState([]);
 
-	const [title, setTitle] = useState("");
-	const [option, setOption] = useState("movie");
-	const [filter, setFilter] = useState("all");
 
+
+	// onchange for title input
+	const [title, setTitle] = useState("");
+	// onchange for dropdown input
+	const [option, setOption] = useState("movie");
+	// onchange for filter dropdown input
+	const [filter, setFilter] = useState("all");
+	// sets the active tab i.e finished or to finish
 	const [activeTab, setActiveTab] = useState("toFinish");
 
 	const baseURL = "http://localhost:5000/api/content";
@@ -31,6 +36,9 @@ function App() {
 		console.log(m);
 	};
 
+
+
+	// Handle form submit to add new content
 	const handleSubmit = (e) => {
 		e.preventDefault();
 		const newContent = {
@@ -40,6 +48,7 @@ function App() {
 		axios
 			.post(`${baseURL}/add`, newContent)
 			.then((res) => setActiveList([...activeList, res.data]))
+			.then(setTitle(""))
 			.catch((error) => console.log(error));
 	};
 
@@ -47,28 +56,18 @@ function App() {
 
 
 
-
+	// Filter list
+	//  first filter is to check, user is in which tab and then filter according to the tab
 	const filterlist = (filter) => {
-		if(activeTab==="toFinish"){
-			const toFinishList = allContent.filter(a => a.Finished === false)
-			if (filter === "all") {
-				setActiveList(toFinishList);
-			} else {
-				const filteredList = toFinishList.filter((a) => a.contentType === filter);
-				// console.log(filteredList.filter(a => a.Finished === true));
-				setActiveList(filteredList);
-			}
-		}else{
-			const FinishedList = allContent.filter((a) => a.Finished === true);
-			if (filter === "all") {
-				setActiveList(FinishedList);
-			} else {
-				const filteredList = FinishedList.filter(
-					(a) => a.contentType === filter
-				);
-				// console.log(filteredList.filter(a => a.Finished === true));
-				setActiveList(filteredList);
-			}
+		// Check if tab is in finished or to finish
+		let activeFinish = activeTab === "toFinish" ? false :true
+		const toFinishList = allContent.filter((a) => a.Finished === activeFinish);
+		if (filter === "all") {
+			setActiveList(toFinishList);
+		} else {
+			const filteredList = toFinishList.filter((a) => a.contentType === filter);
+			// console.log(filteredList.filter(a => a.Finished === true));
+			setActiveList(filteredList);
 		}
 	};
 
@@ -102,12 +101,14 @@ function App() {
 		setActiveTab("Finished");
 		const finished = allContent.filter((a) => a.Finished === true);
 		setActiveList(finished);
+		setFilter("all")
 	};
 	const showNotFinished = () => {
 		// console.log(allContent)
 		setActiveTab("toFinish");
 		const Notfinished = allContent.filter((a) => a.Finished === false);
 		setActiveList(Notfinished);
+		setFilter("all")
 	};
 
 
@@ -142,6 +143,7 @@ function App() {
 					placeholder="title"
 					name="title"
 					onChange={(e) => handleTitle(e)}
+					value={title}
 					required
 				/>
 				<button action="submit">ADD</button>
@@ -167,6 +169,7 @@ function App() {
 					<select
 						placeholder="Filter by type"
 						onChange={(e) => handleFilter(e)}
+						value={filter}
 					>
 						<option value="all">All</option>
 						<option value="movie">Movies</option>
