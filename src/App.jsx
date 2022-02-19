@@ -5,15 +5,12 @@ import { useEffect, useState } from "react";
 import axios from "axios";
 
 function App() {
-	
 	// sets the active list rendered
 	// this is allContent with various filters
 	const [activeList, setActiveList] = useState([]);
 
 	//list all all content regardless of any filters
 	const [allContent, setAllContent] = useState([]);
-
-
 
 	// onchange for title input
 	const [title, setTitle] = useState("");
@@ -25,18 +22,33 @@ function App() {
 	const [activeTab, setActiveTab] = useState("toFinish");
 
 	const baseURL = "http://localhost:5000/api/content";
-	
 
-
-
-
-
+	// Whats its supposed to do
+	// update allContent with the newly finished object
 
 	const handleFinished = (m) => {
-		console.log(m);
+		// console.log(m._id)
+		console.log(activeList);
+		console.log(allContent);
+		
+
+		axios
+			.patch(`${baseURL}/update/${m._id}`, { Finished: true })
+			.then((res) => {
+				let newActiveList = activeList.filter((a) => a._id !== res.data._id);
+				setActiveList(newActiveList);
+				// update allContent
+				console.log(res.data)
+				console.log(newActiveList)
+				// console.log(res.data)
+				const updatedAllContent = allContent.filter(
+					(a) => a._id !== res.data._id
+				);
+				// update the all content with the new finished content
+				setAllContent([...updatedAllContent, res.data]);
+			})
+			.catch((error) => console.log(error));
 	};
-
-
 
 	// Handle form submit to add new content
 	const handleSubmit = (e) => {
@@ -47,20 +59,20 @@ function App() {
 		};
 		axios
 			.post(`${baseURL}/add`, newContent)
-			.then((res) => setActiveList([...activeList, res.data]))
+			.then((res) => {
+				setActiveList([...activeList, res.data]);
+				setAllContent([...allContent, res.data]);
+			})
+
 			.then(setTitle(""))
 			.catch((error) => console.log(error));
 	};
-
-
-
-
 
 	// Filter list
 	//  first filter is to check, user is in which tab and then filter according to the tab
 	const filterlist = (filter) => {
 		// Check if tab is in finished or to finish
-		let activeFinish = activeTab === "toFinish" ? false :true
+		let activeFinish = activeTab === "toFinish" ? false : true;
 		const toFinishList = allContent.filter((a) => a.Finished === activeFinish);
 		if (filter === "all") {
 			setActiveList(toFinishList);
@@ -70,13 +82,6 @@ function App() {
 			setActiveList(filteredList);
 		}
 	};
-
-
-
-
-
-
-
 
 	const handleTitle = (e) => {
 		setTitle(e.target.value);
@@ -91,30 +96,25 @@ function App() {
 		filterlist(e.target.value);
 	};
 
-
-
-
-
-
 	const showFinished = () => {
 		// console.log(allContent)
 		setActiveTab("Finished");
 		const finished = allContent.filter((a) => a.Finished === true);
 		setActiveList(finished);
-		setFilter("all")
+		setFilter("all");
+		// axios.get(`${baseURL}/finished`).then(res => setActiveList(res.data))
 	};
 	const showNotFinished = () => {
-		// console.log(allContent)
+		// console.log("to finish", allContent);
+
 		setActiveTab("toFinish");
 		const Notfinished = allContent.filter((a) => a.Finished === false);
+
+		// console.log(Notfinished);
+
 		setActiveList(Notfinished);
-		setFilter("all")
+		setFilter("all");
 	};
-
-
-
-
-
 
 	useEffect(() => {
 		const getContent = () => {
@@ -126,6 +126,10 @@ function App() {
 		};
 		getContent();
 	}, []);
+
+	// useEffect(() => {
+
+	// },[])
 
 	return (
 		<div className={Style.App}>
@@ -151,7 +155,7 @@ function App() {
 			<div className={Style.topbar}>
 				<div className={Style.left}>
 					<h2
-						className={activeTab === "toFinish"? `${Style.active}` :""}
+						className={activeTab === "toFinish" ? `${Style.active}` : ""}
 						onClick={showNotFinished}
 					>
 						{" "}
@@ -159,7 +163,7 @@ function App() {
 					</h2>
 					<h2
 						onClick={showFinished}
-						className={activeTab === "Finished" ? `${Style.active}` :""}
+						className={activeTab === "Finished" ? `${Style.active}` : ""}
 					>
 						Finished
 					</h2>
@@ -177,25 +181,7 @@ function App() {
 					</select>
 				</div>
 			</div>
-			<div
-				className={Style["card-c"]}
-				// breakpointCols={5}
-				// columnClassName="my-masonry-grid_column"
-			>
-				{/* {movies.map((m) => (
-					<div className={Style.card} onClick={() => handleFinished(m)}>
-						<div style={{ display: "flex", flexDirection: "column" }}>
-							<span>{m.content}</span>
-							<span
-								className={
-									m.type === "movie" ? `${Style.type}` : `${Style.bookType}`
-								}
-							>
-								{m.type}
-							</span>
-						</div>
-					</div>
-				))} */}
+			<div className={Style["card-c"]}>
 				{activeList.map((m) => (
 					<div
 						className={Style.card}
