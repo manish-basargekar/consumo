@@ -17,7 +17,15 @@ function App() {
 	const [option, setOption] = useState("movie");
 	const [filter, setFilter] = useState("all");
 
+	const [activeTab, setActiveTab] = useState("toFinish");
+
 	const baseURL = "http://localhost:5000/api/content";
+	
+
+
+
+
+
 
 	const handleFinished = (m) => {
 		console.log(m);
@@ -35,15 +43,41 @@ function App() {
 			.catch((error) => console.log(error));
 	};
 
+
+
+
+
+
 	const filterlist = (filter) => {
-		if (filter === "all") {
-			setActiveList(allContent);
-		} else {
-			const filteredList = allContent.filter((a) => a.contentType === filter);
-			// console.log(filteredList);
-			setActiveList(filteredList);
+		if(activeTab==="toFinish"){
+			const toFinishList = allContent.filter(a => a.Finished === false)
+			if (filter === "all") {
+				setActiveList(toFinishList);
+			} else {
+				const filteredList = toFinishList.filter((a) => a.contentType === filter);
+				// console.log(filteredList.filter(a => a.Finished === true));
+				setActiveList(filteredList);
+			}
+		}else{
+			const FinishedList = allContent.filter((a) => a.Finished === true);
+			if (filter === "all") {
+				setActiveList(FinishedList);
+			} else {
+				const filteredList = FinishedList.filter(
+					(a) => a.contentType === filter
+				);
+				// console.log(filteredList.filter(a => a.Finished === true));
+				setActiveList(filteredList);
+			}
 		}
 	};
+
+
+
+
+
+
+
 
 	const handleTitle = (e) => {
 		setTitle(e.target.value);
@@ -58,10 +92,33 @@ function App() {
 		filterlist(e.target.value);
 	};
 
+
+
+
+
+
+	const showFinished = () => {
+		// console.log(allContent)
+		setActiveTab("Finished");
+		const finished = allContent.filter((a) => a.Finished === true);
+		setActiveList(finished);
+	};
+	const showNotFinished = () => {
+		// console.log(allContent)
+		setActiveTab("toFinish");
+		const Notfinished = allContent.filter((a) => a.Finished === false);
+		setActiveList(Notfinished);
+	};
+
+
+
+
+
+
 	useEffect(() => {
 		const getContent = () => {
 			axios.get(`${baseURL}`).then((res) => {
-				setActiveList(res.data);
+				setActiveList(res.data.filter((a) => a.Finished === false));
 				setAllContent(res.data);
 			});
 			// .then(console.log(activeList));
@@ -91,8 +148,19 @@ function App() {
 			</form>
 			<div className={Style.topbar}>
 				<div className={Style.left}>
-					<h2 className={Style.active}> To finish </h2>
-					<h2>Finished</h2>
+					<h2
+						className={activeTab === "toFinish"? `${Style.active}` :""}
+						onClick={showNotFinished}
+					>
+						{" "}
+						To finish{" "}
+					</h2>
+					<h2
+						onClick={showFinished}
+						className={activeTab === "Finished" ? `${Style.active}` :""}
+					>
+						Finished
+					</h2>
 				</div>
 				<div className={Style.right}>
 					<span>Filter by type: </span>
