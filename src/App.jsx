@@ -6,15 +6,16 @@ import axios from "axios";
 
 function App() {
 	// tasks
-	// Should be able to add movie or book to db
 	// onclick finished show those in finished tab, and remove from current list
 
 	// const [active, setActive] = useState();
 
 	const [activeList, setActiveList] = useState([]);
+	const [allContent, setAllContent] = useState([]);
 
 	const [title, setTitle] = useState("");
 	const [option, setOption] = useState("movie");
+	const [filter, setFilter] = useState("all");
 
 	const baseURL = "http://localhost:5000/api/content";
 
@@ -28,7 +29,20 @@ function App() {
 			title: title,
 			contentType: option,
 		};
-		console.log(newContent);
+		axios
+			.post(`${baseURL}/add`, newContent)
+			.then((res) => setActiveList([...activeList, res.data]))
+			.catch((error) => console.log(error));
+	};
+
+	const filterlist = (filter) => {
+		if (filter === "all") {
+			setActiveList(allContent);
+		} else {
+			const filteredList = allContent.filter((a) => a.contentType === filter);
+			// console.log(filteredList);
+			setActiveList(filteredList);
+		}
 	};
 
 	const handleTitle = (e) => {
@@ -38,12 +52,19 @@ function App() {
 		setOption(e.target.value);
 	};
 
+	const handleFilter = (e) => {
+		setFilter(e.target.value);
+		// console.log(e.target.value);
+		filterlist(e.target.value);
+	};
+
 	useEffect(() => {
 		const getContent = () => {
-			axios
-				.get(`${baseURL}`)
-				.then((res) => setActiveList(res.data))
-				.then(console.log(activeList));
+			axios.get(`${baseURL}`).then((res) => {
+				setActiveList(res.data);
+				setAllContent(res.data);
+			});
+			// .then(console.log(activeList));
 		};
 		getContent();
 	}, []);
@@ -75,7 +96,10 @@ function App() {
 				</div>
 				<div className={Style.right}>
 					<span>Filter by type: </span>
-					<select name="filter" id="" placeholder="Filter by type">
+					<select
+						placeholder="Filter by type"
+						onChange={(e) => handleFilter(e)}
+					>
 						<option value="all">All</option>
 						<option value="movie">Movies</option>
 						<option value="book">Books</option>
@@ -87,7 +111,7 @@ function App() {
 				// breakpointCols={5}
 				// columnClassName="my-masonry-grid_column"
 			>
-				{movies.map((m) => (
+				{/* {movies.map((m) => (
 					<div className={Style.card} onClick={() => handleFinished(m)}>
 						<div style={{ display: "flex", flexDirection: "column" }}>
 							<span>{m.content}</span>
@@ -99,11 +123,14 @@ function App() {
 								{m.type}
 							</span>
 						</div>
-						{/* <button>finished</button> */}
 					</div>
-				))}
+				))} */}
 				{activeList.map((m) => (
-					<div className={Style.card} onClick={() => handleFinished(m)}>
+					<div
+						className={Style.card}
+						key={m._id}
+						onClick={() => handleFinished(m)}
+					>
 						<div style={{ display: "flex", flexDirection: "column" }}>
 							<span>{m.title}</span>
 							<span
