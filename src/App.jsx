@@ -1,8 +1,8 @@
-import { movies } from "./list";
 import Style from "./App.module.scss";
 
 import { useEffect, useState } from "react";
 import axios from "axios";
+import toast, { Toaster } from "react-hot-toast";
 
 function App() {
 	// sets the active list rendered
@@ -28,8 +28,8 @@ function App() {
 
 	const handleFinished = (m) => {
 		// console.log(m._id)
-		console.log(activeList);
-		console.log(allContent);
+		// console.log(activeList);
+		// console.log(allContent);
 
 		axios
 			.patch(`${baseURL}/update/${m._id}`, { Finished: true })
@@ -46,6 +46,7 @@ function App() {
 				// update the all content with the new finished content
 				setAllContent([...updatedAllContent, res.data]);
 			})
+			.then(toast.success(`Successfully added ${m.title} to Finished`))
 			.catch((error) => console.log(error));
 	};
 
@@ -58,14 +59,16 @@ function App() {
 		};
 		axios
 			.post(`${baseURL}/add`, newContent)
+			.then(toast.success('Successfully created!'))
 			.then((res) => {
 				setActiveList([...activeList, res.data]);
 				setAllContent([...allContent, res.data]);
 			})
-
 			.then(setTitle(""))
-			.catch((error) => console.log(error));
+			.catch((error) => toast.error(error));
 	};
+
+	
 
 	// Filter list
 	//  first filter is to check, user is in which tab and then filter according to the tab
@@ -132,6 +135,7 @@ function App() {
 
 	return (
 		<div className={Style.App}>
+			<Toaster />
 			<div className={Style.head}>
 				<form
 					action="submit"
