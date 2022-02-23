@@ -30,7 +30,6 @@ function App() {
 		// console.log(m._id)
 		console.log(activeList);
 		console.log(allContent);
-		
 
 		axios
 			.patch(`${baseURL}/update/${m._id}`, { Finished: true })
@@ -38,8 +37,8 @@ function App() {
 				let newActiveList = activeList.filter((a) => a._id !== res.data._id);
 				setActiveList(newActiveList);
 				// update allContent
-				console.log(res.data)
-				console.log(newActiveList)
+				console.log(res.data);
+				console.log(newActiveList);
 				// console.log(res.data)
 				const updatedAllContent = allContent.filter(
 					(a) => a._id !== res.data._id
@@ -133,25 +132,30 @@ function App() {
 
 	return (
 		<div className={Style.App}>
-			<form
-				action="submit"
-				className={Style.addForm}
-				onSubmit={(e) => handleSubmit(e)}
-			>
-				<select value={option} onChange={(e) => handleOption(e)}>
-					<option value="movie">Movie</option>
-					<option value="book">Book</option>
-				</select>
-				<input
-					type="text"
-					placeholder="title"
-					name="title"
-					onChange={(e) => handleTitle(e)}
-					value={title}
-					required
-				/>
-				<button action="submit">ADD</button>
-			</form>
+			<div className={Style.head}>
+				<form
+					action="submit"
+					className={Style.addForm}
+					onSubmit={(e) => handleSubmit(e)}
+				>
+					<select value={option} onChange={(e) => handleOption(e)}>
+						<option value="movie">Movie</option>
+						<option value="book">Book</option>
+					</select>
+					<input
+						type="text"
+						placeholder="title"
+						name="title"
+						onChange={(e) => handleTitle(e)}
+						value={title}
+						required
+					/>
+					<button action="submit">ADD</button>
+				</form>
+				<div className={Style.profile}>
+					<button>LOGOUT</button>
+				</div>
+			</div>
 			<div className={Style.topbar}>
 				<div className={Style.left}>
 					<h2
@@ -183,13 +187,48 @@ function App() {
 			</div>
 			<div className={Style["card-c"]}>
 				{activeList.map((m) => (
-					<div
-						className={Style.card}
-						key={m._id}
-						onClick={() => handleFinished(m)}
-					>
+					<div className={Style.card} key={m._id}>
 						<div style={{ display: "flex", flexDirection: "column" }}>
-							<span>{m.title}</span>
+							<div
+								className={Style.dotmenu}
+								style={{ display: activeTab === "toFinish" ? "none" : "" }}
+							>
+								<svg
+									xmlns="http://www.w3.org/2000/svg"
+									width="20"
+									height="20"
+									viewBox="0 0 24 24"
+									fill="none"
+									stroke="orangered"
+									strokeWidth="2"
+									strokeLinecap="round"
+									strokeLinejoin="round"
+									// class="ai ai-Check"
+								>
+									<path d="M4 12l6 6L20 6" />
+								</svg>
+							</div>
+							<div
+								className={Style.dotmenuFinished}
+								style={{ display: activeTab === "Finished" ? "none" : "" }}
+								onClick={() => handleFinished(m)}
+							>
+								<svg
+									xmlns="http://www.w3.org/2000/svg"
+									width="20"
+									height="20"
+									viewBox="0 0 24 24"
+									fill="none"
+									stroke="#1b1b1b"
+									strokeWidth="2"
+									strokeLinecap="round"
+									strokeLinejoin="round"
+									// class="ai ai-Check"
+								>
+									<path d="M4 12l6 6L20 6" />
+								</svg>
+							</div>
+							<div className={Style.contentTitle}>{m.title}</div>
 							<span
 								className={
 									m.contentType === "movie"
@@ -197,6 +236,7 @@ function App() {
 										: `${Style.bookType}`
 								}
 							>
+								{m.contentType === "movie" ? "🎬 " : "📖 "}
 								{m.contentType}
 							</span>
 						</div>

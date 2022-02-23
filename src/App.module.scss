@@ -1,6 +1,27 @@
 .App {
-    max-width: 900px;
+    // max-width: 900px;
+    padding:0 4rem;
     margin: auto;
+    font-family: 'Nunito', sans-serif;
+}
+
+.head{
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    margin-top: 2rem;
+
+    .profile{
+        font-size: 1rem;
+        border-radius: 100%;
+        cursor: pointer;
+
+        button{
+            padding:.3rem 1rem;
+            // border: none;
+            // background-color: #a9ffde;
+        }
+    }
 }
 
 
@@ -8,7 +29,7 @@
     display: flex;
     justify-content: center;
     align-items: center;
-    margin-top: 2rem;
+    // margin-top: 2rem;
 
 
     button{
@@ -31,56 +52,106 @@
     // justify-content: space-between;
     margin: .3rem;
     background: #f4f4f6;
-    padding: .7rem;
-    width: 10.6rem;
+    padding: 1rem;
+    // width: 10.6rem;
+    // flex-basis: 20rem;
+    // flex: 1 20rem;
     position: relative;
     border: 1px solid #e6e3e1;
     // flex-grow: 1;
     // flex-basis: 10rem;
-    &::after{
-        content: "Finished?";
-        background:linear-gradient(to top, rgba(255, 239, 18, 0.993), #fff);
-        position: absolute;
-        width: 100%;
-        height: 100%;
-        left: 0;
-        top: 0;
+    // &::after{
+    //     content: "Finished?";
+    //     background:linear-gradient(to top, rgba(255, 239, 18, 0.993), #fff);
+    //     position: absolute;
+    //     width: 100%;
+    //     height: 100%;
+    //     left: 0;
+    //     top: 0;
+    //     display: flex;
+    //     justify-content: center;
+    //     align-items: center;
+    //     opacity: 0;
+    //     transition: opacity .4s ease;
+    // }
+    word-wrap: break-word;
+
+
+    .dotmenu, .toFinish{
+        background-color: rgb(255, 180, 153);
+        // width: 30px;
+        // height: 30px;
         display: flex;
         justify-content: center;
         align-items: center;
-        opacity: 0;
-        transition: opacity .4s ease;
+        // border-radius: 100px;
+        // margin-top: 1rem;
+        position: absolute;
+        // right: 10px;
+        // bottom: 10px;
+        cursor: default;
+    }
+
+    
+
+    .contentTitle{
+        font-size: 2rem;
     }
 
 
 }
 
 .card:hover{
-    cursor: pointer;
+    // cursor: pointer;
     background: rgb(230, 231, 233);
-    &::after{
-        // content: "Finished?";
-        // background:linear-gradient(to top, rgba(255, 18, 18, 0.993), #fff);
-        // position: absolute;
-        // width: 100%;
-        // height: 100%;
-        // left: 0;
-        // top: 0;
-        // display: flex;
-        // justify-content: center;
-        // align-items: center;
-        opacity: 1;
+    // &::after{
+    //     content: "Finished?";
+    //     background:linear-gradient(to top, rgba(250, 145, 145, 0.993), #fff);
+    //     position: absolute;
+    //     width: 100%;
+    //     height: 100%;
+    //     left: 0;
+    //     top: 0;
+    //     display: flex;
+    //     justify-content: center;
+    //     align-items: center;
+    //     opacity: 1;
        
         
         
-    }
+    // }
 }
 
 
-.card-c{
+.dotmenu, .dotmenuFinished{
+    position: absolute;
+    right: 0px;
+    top: 0px;
+    background-color: rgb(197, 197, 197);
+    height: 40px;
+    width: 40px;
     display: flex;
-    flex-wrap: wrap;
-    justify-content: flex-start;
+    justify-content: center;
+    align-items: center;
+    cursor: pointer;
+    border-radius: 0 0 0 20px;
+}
+
+.dotmenuFinished{
+    background-color: #b4b4b4;
+
+    &:hover{
+         background-color: rgb(255, 180, 153);
+    }
+}
+
+.card-c{
+    // display: flex;
+    // flex-wrap: wrap;
+    // justify-content: flex-start;
+    display: grid;
+    grid-template-columns: repeat(5, 1fr);
+    gap: 5px;
 }
 
 button{
@@ -88,16 +159,19 @@ button{
 }
 
 .type, .bookType{
-    background-color: #ffa98a;
+    // background-color: #a9ffde;
+    background-color: #cfcfcf;
     width: max-content;
     border-radius: 100px;
-    padding:0 .3rem;
-    color:#752609 ;
+    padding:.2rem .5rem;
+    // color:#0d5f40 ;
+    color:#2e302f ;
 }
 
 .bookType{
-    background-color: lightgreen;
-    color: darkgreen;
+    // background-color: rgb(248, 169, 169);
+    // background-color: rgb(68, 63, 63);
+    // color: rgb(94, 20, 20);
 }
 
 
@@ -120,11 +194,17 @@ button{
         h2{
             // background-color: #752609;
             margin-right: 1rem;
+            color: rgb(100, 96, 96);
         }
 
         .active{
             border-bottom:4px solid #752609;
             border-radius: 2px;
+            // background-color: #79ffcc;
+            // border-radius: 100px;
+            // padding: .6rem;
+            // height: 3rem;
+            color: #1b1b1b;
         }
     }
 }
