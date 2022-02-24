@@ -1,0 +1,21 @@
+.container{
+    max-width: 300px;
+    display: flex;
+    flex-direction: column;
+    margin: 2rem;
+
+    button{
+        // width: max-content;
+        margin-top: .5rem;
+    }
+
+    .formField{
+        display: flex;
+        flex-direction: column;
+        margin-top: 1rem;
+    }
+
+    .checkbox{
+        margin:.2rem 0;
+    }
+}

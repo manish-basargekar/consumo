@@ -52,7 +52,7 @@
     // justify-content: space-between;
     margin: .3rem;
     background: #f4f4f6;
-    padding: 1rem;
+    padding:1rem 2.5rem;
     // width: 10.6rem;
     // flex-basis: 20rem;
     // flex: 1 20rem;
@@ -95,7 +95,7 @@
     
 
     .contentTitle{
-        font-size: 2rem;
+        font-size: 1.5rem;
     }
 
 
@@ -138,7 +138,7 @@
 }
 
 .dotmenuFinished{
-    background-color: #b4b4b4;
+    background-color: #e0dddd;
 
     &:hover{
          background-color: rgb(255, 180, 153);
@@ -166,12 +166,6 @@ button{
     padding:.2rem .5rem;
     // color:#0d5f40 ;
     color:#2e302f ;
-}
-
-.bookType{
-    // background-color: rgb(248, 169, 169);
-    // background-color: rgb(68, 63, 63);
-    // color: rgb(94, 20, 20);
 }
 
 
