@@ -4,7 +4,15 @@ import { useEffect, useState } from "react";
 import axios from "axios";
 import toast, { Toaster } from "react-hot-toast";
 
+import { signOut } from "firebase/auth";
+import auth from "./Firebase-config";
+
+import { Navigate, useNavigate } from "react-router-dom";
+
+import { useAuth } from "./use-auth.js";
+
 function Dashboard() {
+	const auth = useAuth();
 	// sets the active list rendered
 	// this is allContent with various filters
 	const [activeList, setActiveList] = useState([]);
@@ -44,7 +52,7 @@ function Dashboard() {
 					(a) => a._id !== res.data._id
 				);
 				// update the all content with the new finished content
-				setAllContent([res.data,...updatedAllContent]);
+				setAllContent([res.data, ...updatedAllContent]);
 			})
 			.then(toast.success(`Successfully added ${m.title} to Finished`))
 			.catch((error) => console.log(error));
@@ -61,14 +69,12 @@ function Dashboard() {
 			.post(`${baseURL}/add`, newContent)
 			.then(toast.success(`Successfully Added ${newContent.title} `))
 			.then((res) => {
-				setActiveList([ res.data,...activeList]);
-				setAllContent([res.data,...allContent]);
+				setActiveList([res.data, ...activeList]);
+				setAllContent([res.data, ...allContent]);
 			})
 			.then(setTitle(""))
 			.catch((error) => toast.error(error));
 	};
-
-	
 
 	// Filter list
 	//  first filter is to check, user is in which tab and then filter according to the tab
@@ -133,122 +139,132 @@ function Dashboard() {
 
 	// },[])
 
+	const navigate = useNavigate();
+	const handleLogout = () => {
+		auth.signout()
+		navigate("/")
+	};
+
+	// const user = true
 	return (
-		<div className={Style.App}>
-			<Toaster />
-			<div className={Style.head}>
-				<form
-					action="submit"
-					className={Style.addForm}
-					onSubmit={(e) => handleSubmit(e)}
-				>
-					<select value={option} onChange={(e) => handleOption(e)}>
-						<option value="movie">Movie</option>
-						<option value="book">Book</option>
-					</select>
-					<input
-						type="text"
-						placeholder="title"
-						name="title"
-						onChange={(e) => handleTitle(e)}
-						value={title}
-						required
-					/>
-					<button action="submit">ADD</button>
-				</form>
-				<div className={Style.profile}>
-					<button>LOGOUT</button>
-				</div>
-			</div>
-			<div className={Style.topbar}>
-				<div className={Style.left}>
-					<h2
-						className={activeTab === "toFinish" ? `${Style.active}` : ""}
-						onClick={showNotFinished}
+		<>
+		{console.log(auth.user)}
+			<div className={Style.App}>
+				<Toaster />
+				<div className={Style.head}>
+					<form
+						action="submit"
+						className={Style.addForm}
+						onSubmit={(e) => handleSubmit(e)}
 					>
-						{" "}
-						To finish{" "}
-					</h2>
-					<h2
-						onClick={showFinished}
-						className={activeTab === "Finished" ? `${Style.active}` : ""}
-					>
-						Finished
-					</h2>
-				</div>
-				<div className={Style.right}>
-					<span>Filter by type: </span>
-					<select
-						placeholder="Filter by type"
-						onChange={(e) => handleFilter(e)}
-						value={filter}
-					>
-						<option value="all">All</option>
-						<option value="movie">Movies</option>
-						<option value="book">Books</option>
-					</select>
-				</div>
-			</div>
-			<div className={Style["card-c"]}>
-				{activeList.map((m) => (
-					<div className={Style.card} key={m._id}>
-						<div style={{ display: "flex", flexDirection: "column" }}>
-							<div
-								className={Style.dotmenu}
-								style={{ display: activeTab === "toFinish" ? "none" : "" }}
-							>
-								<svg
-									xmlns="http://www.w3.org/2000/svg"
-									width="20"
-									height="20"
-									viewBox="0 0 24 24"
-									fill="none"
-									stroke="orangered"
-									strokeWidth="2"
-									strokeLinecap="round"
-									strokeLinejoin="round"
-									// class="ai ai-Check"
-								>
-									<path d="M4 12l6 6L20 6" />
-								</svg>
-							</div>
-							<div
-								className={Style.dotmenuFinished}
-								style={{ display: activeTab === "Finished" ? "none" : "" }}
-								onClick={() => handleFinished(m)}
-							>
-								<svg
-									xmlns="http://www.w3.org/2000/svg"
-									width="20"
-									height="20"
-									viewBox="0 0 24 24"
-									fill="none"
-									stroke="#1b1b1b"
-									strokeWidth="2"
-									strokeLinecap="round"
-									strokeLinejoin="round"
-									// class="ai ai-Check"
-								>
-									<path d="M4 12l6 6L20 6" />
-								</svg>
-							</div>
-							<div className={Style.contentTitle}>{m.title}</div>
-							<span
-								className={
-									m.contentType === "movie"
-										? `${Style.type}`
-										: `${Style.bookType}`
-								}
-							>
-								{m.contentType === "movie" ? "🎬 " : "📖 "}
-								{m.contentType}
-							</span>
-						</div>
-						{/* <button>finished</button> */}
+						<select value={option} onChange={(e) => handleOption(e)}>
+							<option value="movie">Movie</option>
+							<option value="book">Book</option>
+						</select>
+						<input
+							type="text"
+							placeholder="title"
+							name="title"
+							onChange={(e) => handleTitle(e)}
+							value={title}
+							required
+						/>
+						<button action="submit">ADD</button>
+					</form>
+					<div className={Style.profile}>
+						<button onClick={handleLogout}>LOGOUT</button>
 					</div>
-				))}
+				</div>
+				<div className={Style.topbar}>
+					<div className={Style.left}>
+						<h2
+							className={activeTab === "toFinish" ? `${Style.active}` : ""}
+							onClick={showNotFinished}
+						>
+							{" "}
+							To finish{" "}
+						</h2>
+						<h2
+							onClick={showFinished}
+							className={activeTab === "Finished" ? `${Style.active}` : ""}
+						>
+							Finished
+						</h2>
+					</div>
+					<div className={Style.right}>
+						<span>Filter by type: </span>
+						<select
+							placeholder="Filter by type"
+							onChange={(e) => handleFilter(e)}
+							value={filter}
+						>
+							<option value="all">All</option>
+							<option value="movie">Movies</option>
+							<option value="book">Books</option>
+						</select>
+					</div>
+				</div>
+				<div className={Style["card-c"]}>
+					{activeList.map((m) => (
+						<div className={Style.card} key={m._id}>
+							<div style={{ display: "flex", flexDirection: "column" }}>
+								<div
+									className={Style.dotmenu}
+									style={{ display: activeTab === "toFinish" ? "none" : "" }}
+								>
+									<svg
+										xmlns="http://www.w3.org/2000/svg"
+										width="20"
+										height="20"
+										viewBox="0 0 24 24"
+										fill="none"
+										stroke="orangered"
+										strokeWidth="2"
+										strokeLinecap="round"
+										strokeLinejoin="round"
+										// class="ai ai-Check"
+									>
+										<path d="M4 12l6 6L20 6" />
+									</svg>
+								</div>
+								<div
+									className={Style.dotmenuFinished}
+									style={{ display: activeTab === "Finished" ? "none" : "" }}
+									onClick={() => handleFinished(m)}
+								>
+									<svg
+										xmlns="http://www.w3.org/2000/svg"
+										width="20"
+										height="20"
+										viewBox="0 0 24 24"
+										fill="none"
+										stroke="#1b1b1b"
+										strokeWidth="2"
+										strokeLinecap="round"
+										strokeLinejoin="round"
+										// class="ai ai-Check"
+									>
+										<path d="M4 12l6 6L20 6" />
+									</svg>
+								</div>
+								<div className={Style.contentTitle}>{m.title}</div>
+								<span
+									className={
+										m.contentType === "movie"
+											? `${Style.type}`
+											: `${Style.bookType}`
+									}
+								>
+									{m.contentType === "movie" ? "🎬 " : "📖 "}
+									{m.contentType}
+								</span>
+							</div>
+							{/* <button>finished</button> */}
+						</div>
+					))}
+				</div>
 			</div>
-		</div>
+		</>
 	);
 }
 

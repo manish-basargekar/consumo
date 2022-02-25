@@ -1,6 +1,12 @@
 import { useState } from "react";
 import Style from "./styles/Login.module.scss";
 import { Link } from "react-router-dom";
+
+import { signInWithEmailAndPassword} from "firebase/auth"
+
+import auth from "./Firebase-config"
+
+
 function Login() {
 	const [passwordShown, setPasswordShown] = useState(false);
 
@@ -10,24 +16,31 @@ function Login() {
 	const togglePassword = () => {
 		setPasswordShown(!passwordShown);
 	};
+	
 
-	const handleGoogleLogin = () => {
-		console.log("Log in with google");
-	};
 
-	const handleLogin = (e) => {
-        e.preventDefault()
+
+	const handleLogin = async (e) => {
+		e.preventDefault();
 		console.log(email);
 		console.log(password);
+		try {
+			await signInWithEmailAndPassword(auth, email, password)
+		} catch (error) {
+			console.log(error)
+		}
 	};
 
 	return (
 		<div className={Style.container}>
-			<button onClick={handleGoogleLogin}>Login with google</button>
+			<Link to="/">
+				<div className="home">Home</div>
+			</Link>
 			{/* <div className={Style.formField}>
 				<label htmlFor="username">Username</label>
                 <input type="text" placeholder="username" />
 			</div> */}
+			<h1>Log In</h1>
 			<form onSubmit={handleLogin}>
 				<div className={Style.formField}>
 					<label htmlFor="email">Email</label>
