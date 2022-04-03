@@ -4,12 +4,14 @@ import { useEffect, useState } from "react";
 import axios from "axios";
 import toast, { Toaster } from "react-hot-toast";
 
+import { useNavigate } from "react-router-dom";
+// import * as api from "./api/index";
 
-import { Navigate, useNavigate } from "react-router-dom";
 
-
+import jwtDecode from "jwt-decode";
 
 function Dashboard() {
+	const navigate = useNavigate();
 	// const auth = useAuth();
 	// sets the active list rendered
 	// this is allContent with various filters
@@ -33,6 +35,9 @@ function Dashboard() {
 	// update allContent with the newly finished object
 
 	const handleFinished = (m) => {
+
+
+		
 		// console.log(m._id)
 		// console.log(activeList);
 		// console.log(allContent);
@@ -59,10 +64,17 @@ function Dashboard() {
 	// Handle form submit to add new content
 	const handleSubmit = (e) => {
 		e.preventDefault();
+	
+
+		const {user_id} = jwtDecode(localStorage.getItem("token"))
+		console.log(localStorage.getItem("token"));
+
 		const newContent = {
 			title: title,
 			contentType: option,
+			userId: user_id,
 		};
+		console.log(newContent)
 		axios
 			.post(`${baseURL}/add`, newContent)
 			.then(toast.success(`Successfully Added ${newContent.title} `))
@@ -122,14 +134,26 @@ function Dashboard() {
 		setFilter("all");
 	};
 
+
+	const user = localStorage.getItem("token")
+
 	useEffect(() => {
+		if (!user ) navigate("/")
+	}, [user])
+
+	useEffect(() => {
+		const headers = {
+			"x-access-token": localStorage.getItem("token"),
+		};
 		const getContent = () => {
-			axios.get(`${baseURL}`).then((res) => {
+			axios.get(`${baseURL}`, { headers }).then((res) => {
 				setActiveList(res.data.filter((a) => a.Finished === false));
 				setAllContent(res.data);
 			});
 			// .then(console.log(activeList));
 		};
+		if(!user) return
+
 		getContent();
 	}, []);
 
@@ -137,16 +161,17 @@ function Dashboard() {
 
 	// },[])
 
-	const navigate = useNavigate();
+	
 	const handleLogout = () => {
 		// auth.signout()
-		navigate("/")
+		localStorage.clear();
+		navigate("/");
 	};
 
 	// const user = true
 	return (
 		<>
-		{/* {console.log(auth.user)} */}
+			{/* {console.log(auth.user)} */}
 			<div className={Style.App}>
 				<Toaster />
 				<div className={Style.head}>

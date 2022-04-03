@@ -1,8 +1,8 @@
 import { useState } from "react";
 import Style from "./styles/Login.module.scss";
-import { Link } from "react-router-dom";
+import { Link, Navigate, useNavigate } from "react-router-dom";
 
-import { signInWithEmailAndPassword} from "firebase/auth"
+
 
 
 
@@ -18,14 +18,34 @@ function Login() {
 	};
 	
 
+	const navigate = useNavigate()
+
+
 
 
 	const handleLogin = async (e) => {
 		e.preventDefault();
-		console.log(email);
-		console.log(password);
 		try {
-			// await signInWithEmailAndPassword(auth, email, password)
+			const response = await fetch("http://localhost:5000/api/user/login", {
+				method: "POST",
+				headers: {
+					"Content-Type": "application/json",
+				},
+				body: JSON.stringify({
+					email,
+					password,
+				}),
+			});
+
+			const data = await response.json();
+
+			if (data.user) {
+				localStorage.setItem("token", data.user);
+				alert("Login successful");
+				navigate("/dashboard")
+			} else {
+				alert("Please check your username and password");
+			}
 		} catch (error) {
 			console.log(error)
 		}

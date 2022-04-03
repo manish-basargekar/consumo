@@ -1,31 +1,49 @@
 import { useState } from "react";
 import Style from "./styles/Login.module.scss";
-import { Link } from "react-router-dom";
+import { Link, useNavigate } from "react-router-dom";
 
 import { createUserWithEmailAndPassword } from "firebase/auth";
-
-
 
 function SignUp() {
 	const [passwordShown, setPasswordShown] = useState(false);
 
 	const [email, setEmail] = useState("");
 	const [password, setPassword] = useState("");
+	const [name, setName] = useState("");
 
 	const togglePassword = () => {
 		setPasswordShown(!passwordShown);
 	};
 
+	const navigate = useNavigate();
+
 	const handleSignup = async (e) => {
 		e.preventDefault();
 
+
 		try {
-			// const res = await createUserWithEmailAndPassword(auth, email, password);
-			// const user = res.user;
-			// console.log(user);
+			
+			const response = await fetch("http://localhost:5000/api/user/register", {
+				method: "POST",
+				headers: {
+					"Content-Type": "application/json",
+				},
+				body: JSON.stringify({
+					name,
+					email,
+					password,
+				}),
+			});
+	
+			const data = await response.json();
+	
+			localStorage.setItem("token", data.user);
+			alert("Login successful");
+			navigate("/dashboard");
 		} catch (error) {
-			console.log(error);
+			console.log(error)
 		}
+
 	};
 
 	return (
@@ -37,7 +55,11 @@ function SignUp() {
 			<form onSubmit={handleSignup}>
 				<div className={Style.formField}>
 					<label htmlFor="username">First name</label>
-					<input type="text" placeholder="First name" />
+					<input
+						type="text"
+						placeholder="First name"
+						onChange={(e) => setName(e.target.value)}
+					/>
 				</div>
 				<div className={Style.formField}>
 					<label htmlFor="email">Email</label>
