@@ -1,4 +1,3 @@
-
 import { useEffect, useState } from "react";
 import { BrowserRouter, Routes, Route } from "react-router-dom";
 import Dashboard from "./Dashboard";
@@ -6,24 +5,13 @@ import Homepage from "./Homepage";
 import Login from "./Login";
 import SignUp from "./SignUp";
 
-
-
-
-import {ProvideAuth, useAuth} from "./use-auth.js"
-
+// import { ProvideAuth, useAuth } from "./use-auth.js";
 
 function App() {
-
-
-
-
-	const auth = useAuth()
-	
-
-
+	// const auth = useAuth();
 
 	return (
-		<ProvideAuth>
+		// <ProvideAuth>
 			<BrowserRouter>
 				<Routes>
 					<Route path="/" element={<Homepage />} />
@@ -32,7 +20,7 @@ function App() {
 					<Route path="signup" element={<SignUp />} />
 				</Routes>
 			</BrowserRouter>
-		</ProvideAuth>
+		// </ProvideAuth>
 	);
 }
 

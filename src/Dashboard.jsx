@@ -4,15 +4,13 @@ import { useEffect, useState } from "react";
 import axios from "axios";
 import toast, { Toaster } from "react-hot-toast";
 
-import { signOut } from "firebase/auth";
-import auth from "./Firebase-config";
 
 import { Navigate, useNavigate } from "react-router-dom";
 
-import { useAuth } from "./use-auth.js";
+
 
 function Dashboard() {
-	const auth = useAuth();
+	// const auth = useAuth();
 	// sets the active list rendered
 	// this is allContent with various filters
 	const [activeList, setActiveList] = useState([]);
@@ -141,14 +139,14 @@ function Dashboard() {
 
 	const navigate = useNavigate();
 	const handleLogout = () => {
-		auth.signout()
+		// auth.signout()
 		navigate("/")
 	};
 
 	// const user = true
 	return (
 		<>
-		{console.log(auth.user)}
+		{/* {console.log(auth.user)} */}
 			<div className={Style.App}>
 				<Toaster />
 				<div className={Style.head}>

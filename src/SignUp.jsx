@@ -4,7 +4,7 @@ import { Link } from "react-router-dom";
 
 import { createUserWithEmailAndPassword } from "firebase/auth";
 
-import auth from "./Firebase-config";
+
 
 function SignUp() {
 	const [passwordShown, setPasswordShown] = useState(false);
@@ -20,9 +20,9 @@ function SignUp() {
 		e.preventDefault();
 
 		try {
-			const res = await createUserWithEmailAndPassword(auth, email, password);
-			const user = res.user;
-			console.log(user);
+			// const res = await createUserWithEmailAndPassword(auth, email, password);
+			// const user = res.user;
+			// console.log(user);
 		} catch (error) {
 			console.log(error);
 		}

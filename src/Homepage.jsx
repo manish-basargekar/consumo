@@ -2,17 +2,16 @@ import Style from "./styles/Homepage.module.scss";
 
 import { Link } from "react-router-dom";
 
-import { useAuth } from "./use-auth";
 
-import { handleGoogleLogin } from "./use-auth";
+
 
 function Homepage() {
 
 
-	const auth = useAuth();
+
 
 	const handleGoogle = () => {
-		auth.handleGoogleLogin()
+		
 	}
 
 

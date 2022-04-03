@@ -4,7 +4,7 @@ import { Link } from "react-router-dom";
 
 import { signInWithEmailAndPassword} from "firebase/auth"
 
-import auth from "./Firebase-config"
+
 
 
 function Login() {
@@ -25,7 +25,7 @@ function Login() {
 		console.log(email);
 		console.log(password);
 		try {
-			await signInWithEmailAndPassword(auth, email, password)
+			// await signInWithEmailAndPassword(auth, email, password)
 		} catch (error) {
 			console.log(error)
 		}
