@@ -1,6 +1,6 @@
 .App {
-    // max-width: 900px;
-    padding:0 4rem;
+    max-width: 900px;
+    // padding:0 4rem;
     margin: auto;
     font-family: 'Nunito', sans-serif;
 }
@@ -150,7 +150,7 @@
     // flex-wrap: wrap;
     // justify-content: flex-start;
     display: grid;
-    grid-template-columns: repeat(5, 1fr);
+    grid-template-columns: repeat(3, 1fr);
     gap: 5px;
 }
 

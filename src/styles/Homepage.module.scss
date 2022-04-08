@@ -1,10 +1,33 @@
 .container{
     display: flex;
     flex-direction: column;
-    width: 20rem;
+    // width: 20rem;
+    justify-content: center;
+    align-items: center;
+    min-height: 100vh;
 
-    button{
-        margin-top: 1rem;
+    .wrapper{
+        // background-color: aqua;
+        border: 2px solid #eee;
+        padding: 1rem;
+        h1{
+            text-align: center;
+            font-size: 3rem;
+        }
+    }
+
+    .signup{
+        background-color: orangered;
+        color: #fff;
+        border: none;
         margin-left: 1rem;
+
+    }
+    button{
+        border-radius: 4px;
+        // margin-top: 1rem;
+        // margin-left: 1rem;
+        padding: 1rem;
+        border: none;
     }
 }

@@ -2,7 +2,8 @@ import { useState } from "react";
 import Style from "./styles/Login.module.scss";
 import { Link, useNavigate } from "react-router-dom";
 
-import { createUserWithEmailAndPassword } from "firebase/auth";
+
+import axios from "axios";
 
 function SignUp() {
 	const [passwordShown, setPasswordShown] = useState(false);
@@ -20,37 +21,45 @@ function SignUp() {
 	const handleSignup = async (e) => {
 		e.preventDefault();
 
-
 		try {
-			
-			const response = await fetch("http://localhost:5000/api/user/register", {
-				method: "POST",
-				headers: {
-					"Content-Type": "application/json",
-				},
-				body: JSON.stringify({
+			// const response = await fetch("http://localhost:5000/api/user/register", {
+			// 	method: "POST",
+			// 	headers: {
+			// 		"Content-Type": "application/json",
+			// 	},
+			// 	body: JSON.stringify({
+			// 		name,
+			// 		email,
+			// 		password,
+			// 	}),
+			// });
+
+			const response = await axios.post(
+				"http://localhost:5000/api/user/register",
+				{
 					name,
 					email,
 					password,
-				}),
-			});
-	
-			const data = await response.json();
-	
+				}
+			);
+
+			const data = await response.data;
+
 			localStorage.setItem("token", data.user);
 			alert("Login successful");
 			navigate("/dashboard");
 		} catch (error) {
-			console.log(error)
+			console.log(error);
 		}
-
 	};
 
 	return (
 		<div className={Style.container}>
 			<Link to="/">
-				<div className="home">Home</div>
+				<div className={Style.home}>Home</div>
 			</Link>
+			<div className={Style.wrapper}>
+
 			<h1>Sign Up</h1>
 			<form onSubmit={handleSignup}>
 				<div className={Style.formField}>
@@ -88,11 +97,12 @@ function SignUp() {
 					/>
 					<label htmlFor="check">Show password</label>
 				</div>
-				<button type="submit">Sign Up</button>
+				<button type="submit" className={Style.submitBtn}>Sign Up</button>
 			</form>
-			<div>
+			<div className={Style.linkTo}>
 				Already have an account?
 				<Link to="/login">Log in</Link>
+			</div>
 			</div>
 		</div>
 	);
