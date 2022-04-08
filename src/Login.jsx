@@ -31,7 +31,7 @@ function Login() {
 			// });
 
 			const response = await axios.post(
-				"http://localhost:5000/api/user/login",
+				"https://kontent-server.herokuapp.com/api/user/login",
 				{
 					email,
 					password,

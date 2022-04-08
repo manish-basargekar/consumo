@@ -29,7 +29,7 @@ function Dashboard() {
 	// sets the active tab i.e finished or to finish
 	const [activeTab, setActiveTab] = useState("toFinish");
 
-	const baseURL = "http://localhost:5000/api/content";
+	const baseURL = "https://kontent-server.herokuapp.com/api/content";
 
 	// Whats its supposed to do
 	// update allContent with the newly finished object

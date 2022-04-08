@@ -35,7 +35,7 @@ function SignUp() {
 			// });
 
 			const response = await axios.post(
-				"http://localhost:5000/api/user/register",
+				"https://kontent-server.herokuapp.com/api/user/register",
 				{
 					name,
 					email,
